@@ -33,4 +33,27 @@ $(document).ready(->
     $(".favorite-table-block").addClass("favorited")
     $(".favorite-table-block").removeClass("unfavorited")
   )
+
+  $("#data_source_adapter").change(()->
+    adapter = $("#data_source_adapter").val()
+    console.log adapter
+
+    if adapter == 'bigquery'
+      $('.bigquery').removeClass('hidden')
+      $('.database').addClass('hidden')
+    else
+      $('.bigquery').addClass('hidden')
+      $('.database').removeClass('hidden')
+  )
+
+  $('form').on 'click', '.remove_fields', (event) ->
+    $(this).closest('fieldset').find('input[type=hidden]').val('1')
+    $(this).closest('fieldset').hide()
+    event.preventDefault()
+
+  $('form').on 'click', '.add_fields', (event) ->
+    time = new Date().getTime()
+    regexp = new RegExp($(this).data('id'), 'g')
+    $('.fieldset').append($(this).data('fields').replace(regexp, time))
+    event.preventDefault()
 )

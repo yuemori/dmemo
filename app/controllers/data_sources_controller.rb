@@ -1,5 +1,5 @@
 class DataSourcesController < ApplicationController
-  permits :name, :description, :adapter, :host, :port, :dbname, :user, :password, :encoding
+  permits :name, :description, :adapter, :host, :port, :dbname, :user, :password, :encoding, :bigquery_dataset_name, bigquery_tables_attributes: [:id, :name, :_destroy]
 
   before_action :require_admin_login, only: %w(new create edit update destroy)
 
@@ -15,10 +15,15 @@ class DataSourcesController < ApplicationController
 
   def new
     @data_source = DataSource.new
+    @data_source.bigquery_tables.build
   end
 
   def create(data_source)
-    @data_source = DataSource.create!(data_source_params(data_source))
+    if data_source[:adapter] == 'bigquery'
+      @data_source = BigqueryDataSource.create!(data_source_params(data_source))
+    else
+      @data_source = DatabaseDataSource.create!(data_source_params(data_source))
+    end
     flash[:info] = t("data_source_updated", name: @data_source.name)
     redirect_to data_sources_path
   rescue ActiveRecord::ActiveRecordError => e
@@ -27,7 +32,7 @@ class DataSourcesController < ApplicationController
   end
 
   def edit(id)
-    @data_source = DataSource.find(id)
+    @data_source = DataSource.includes(:bigquery_tables).find(id)
     @data_source.password = DUMMY_PASSWORD
   end
 

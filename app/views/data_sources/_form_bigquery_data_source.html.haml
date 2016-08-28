@@ -1,0 +1,22 @@
+= form_for @data_source.becomes(DataSource), html: { class: "form-horizontal" } do |f|
+  .box-body
+    .form-group
+      = f.label :name, class: "col-sm-2 control-label"
+      .col-sm-10= f.text_field :name, class: "form-control", placeholder: "localhost"
+    .form-group
+      = f.label :description, class: "col-sm-2 control-label"
+      .col-sm-10= f.text_field :description, class: "form-control", placeholder: "localhost database"
+    .form-group
+      = f.label :adapter, class: "col-sm-2 control-label"
+      .col-sm-10= f.select :adapter, %w(bigquery), {}, class: "form-control"
+    .form-group
+      = f.label :dataset_name, class: "col-sm-2 control-label"
+      .col-sm-10= f.text_field :bigquery_dataset_name, class: "form-control", placeholder: "localhost"
+    .form-group
+      = f.label :bigquery_tables, class: "col-sm-2 control-label"
+      .col-sm-1= link_to_add_fields '追加', f, :bigquery_tables
+      .col-sm-9.fieldset
+        = f.fields_for :bigquery_tables do |builder|
+          = render 'bigquery_table_fields', f: builder
+  .box-footer
+    = f.submit class: "btn btn-primary pull-right"

@@ -8,24 +8,32 @@
       .col-sm-10= f.text_field :description, class: "form-control", placeholder: "localhost database"
     .form-group
       = f.label :adapter, class: "col-sm-2 control-label"
-      .col-sm-10= f.select :adapter, %w(redshift postgresql mysql2), {}, class: "form-control"
-    .form-group
+      .col-sm-10= f.select :adapter, activated_adapter, {}, class: "form-control"
+    .form-group.database
       = f.label :host, class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :host, class: "form-control", placeholder: "localhost"
-    .form-group
+    .form-group.database
       = f.label :port, class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :port, class: "form-control", placeholder: "5432"
-    .form-group
+    .form-group.database
       = f.label :dbname, "Database Name", class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :dbname, class: "form-control", placeholder: "dmemo"
-    .form-group
+    .form-group.database
       = f.label :user, class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :user, class: "form-control", placeholder: "root"
-    .form-group
+    .form-group.database
       = f.label :password, class: "col-sm-2 control-label"
       .col-sm-10= f.password_field :password, class: "form-control", value: @data_source.password
-    .form-group
+    .form-group.database
       = f.label :encoding, class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :encoding, class: "form-control"
+    .form-group.bigquery.hidden
+      = f.label :dataset_name, class: "col-sm-2 control-label"
+      .col-sm-10= f.text_field :bigquery_dataset_name, class: "form-control", placeholder: "production_logs"
+    .form-group.bigquery.hidden
+      = f.label :bigquery_tables, class: "col-sm-2 control-label"
+      .col-sm-1= link_to_add_fields '追加', f, :bigquery_tables
+      = f.fields_for :bigquery_tables do |builder|
+        .col-sm-9.fieldset= render 'bigquery_table_fields', f: builder
   .box-footer
     = f.submit class: "btn btn-primary pull-right"
