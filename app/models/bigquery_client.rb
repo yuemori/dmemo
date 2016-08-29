@@ -5,10 +5,18 @@ class BigqueryClient
     end
 
     def enable?
-      ENV['GOOGLE_CLOUD_PROJECT'] && ENV['GOOGLE_CLOUD_KEYFILE']
+      project_id && keyfile
+    end
+
+    def project_id
+      ENV['GOOGLE_CLOUD_PROJECT']
     end
 
     private
+
+    def keyfile
+      ENV['GOOGLE_CLOUD_KEYFILE']
+    end
 
     def client
       @client ||= Gcloud.new.bigquery
