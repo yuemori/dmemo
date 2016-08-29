@@ -32,8 +32,8 @@ describe :synchronized_database, type: :request do
 
       dataset = schema_memo.table_memos.find_by!(name: "data_sources").raw_dataset
       expect(dataset.count).to eq(1)
-      expect(dataset.columns.map(&:name)).to match_array(%w(id name description adapter bigquery_dataset_name host port dbname user password encoding pool created_at updated_at type))
-      expect(dataset.rows.take.row[1..8]).to match_array(["dmemo", "", "", "postgresql", "localhost", "5432", "dmemo_test", "postgres"])
+      expect(dataset.columns.map(&:name)).to match_array(%w(id name description adapter bigquery_dataset_name bigquery_project_id bigquery_keyfile host port dbname user password encoding pool created_at updated_at type))
+      expect(dataset.rows.take.row[1..10]).to match_array(["dmemo", "", "", "", "", "postgresql", "localhost", "5432", "dmemo_test", "postgres"])
     end
 
     context "with invalid connection param" do

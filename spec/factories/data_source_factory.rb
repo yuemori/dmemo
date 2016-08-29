@@ -32,6 +32,8 @@ FactoryGirl.define do
     description "# dmemo test bigquery\nBigquery for test."
     adapter "bigquery"
     bigquery_dataset_name 'prod_logs'
+    bigquery_project_id 'dmemo_project'
+    bigquery_keyfile SecureRandom.hex(128)
     type "BigqueryDataSource"
 
     trait :with_bigquery_tables do
