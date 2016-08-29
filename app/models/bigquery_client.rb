@@ -1,25 +1,33 @@
 class BigqueryClient
-  class << self
-    def fetch_table(dataset_name, table_name)
-      client.dataset(dataset_name).table(table_name)
-    end
+  delegate :table, to: :dataset
 
-    def enable?
-      project_id && keyfile
-    end
+  def initialize(project_id, keyfile, dataset_name)
+    @project_id = project_id
+    @keyfile = keyfile
+    @dataset_name = dataset_name
+  end
 
-    def project_id
-      ENV['GOOGLE_CLOUD_PROJECT']
-    end
+  def valid?
+    client.present? && dataset.present?
+  rescue Google::Cloud::NotFoundError
+    false
+  end
 
-    private
+  private
 
-    def keyfile
-      ENV['GOOGLE_CLOUD_KEYFILE']
-    end
+  def dataset
+    @dataset ||= client.dataset(@dataset_name)
+  end
 
-    def client
-      @client ||= Gcloud.new.bigquery
+  def client
+    @client ||= begin
+      Tempfile.create('bigquery_keyfile') do |file|
+        file.write JSON.load(Encryptor.decrypt(@keyfile).to_json)
+        file.rewind
+        return Gcloud.new(@project_id, file).bigquery
+      end
     end
+  rescue JSON::ParserError
+    nil
   end
 end

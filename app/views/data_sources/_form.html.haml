@@ -8,7 +8,7 @@
       .col-sm-10= f.text_field :description, class: "form-control", placeholder: "localhost database"
     .form-group
       = f.label :adapter, class: "col-sm-2 control-label"
-      .col-sm-10= f.select :adapter, activated_adapter, {}, class: "form-control"
+      .col-sm-10= f.select :adapter, %w(redshift postgresql mysql2 bigquery), {}, class: "form-control"
     .form-group.database
       = f.label :host, class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :host, class: "form-control", placeholder: "localhost"
@@ -28,8 +28,14 @@
       = f.label :encoding, class: "col-sm-2 control-label"
       .col-sm-10= f.text_field :encoding, class: "form-control"
     .form-group.bigquery.hidden
+      = f.label :bigquery_project_id, class: "col-sm-2 control-label"
+      .col-sm-10= f.text_field :bigquery_project_id, class: "form-control", placeholder: "my-project"
+    .form-group.bigquery.hidden
+      = f.label :bigquery_keyfile, class: "col-sm-2 control-label"
+      .col-sm-10= f.file_field :bigquery_keyfile, class: "form-control"
+    .form-group.bigquery.hidden
       = f.label :dataset_name, class: "col-sm-2 control-label"
-      .col-sm-10= f.text_field :bigquery_dataset_name, class: "form-control", placeholder: "production_logs"
+      .col-sm-10= f.text_field :bigquery_dataset_name, class: "form-control", placeholder: "prod_logs"
     .form-group.bigquery.hidden
       = f.label :bigquery_tables, class: "col-sm-2 control-label"
       .col-sm-1= link_to_add_fields '追加', f, :bigquery_tables

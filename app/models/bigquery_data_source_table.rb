@@ -36,7 +36,11 @@ class BigqueryDataSourceTable < AbstractDataSourceTable
 
   private
 
+  def bigquery_client
+    @bigquery_client ||= BigqueryClient.new(data_source.bigquery_project_id, data_source.bigquery_keyfile, data_source.bigquery_dataset_name)
+  end
+
   def bigquery_table
-    @bigquery_table ||= BigqueryClient.fetch_table(dataset_name, table_name)
+    @bigquery_table ||= bigquery_client.table(table_name) || (raise DataSource::ConnectionBad.new('Table Not Found'))
   end
 end

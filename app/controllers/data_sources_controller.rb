@@ -1,5 +1,5 @@
 class DataSourcesController < ApplicationController
-  permits :name, :description, :adapter, :host, :port, :dbname, :user, :password, :encoding, :bigquery_dataset_name, bigquery_tables_attributes: [:id, :name, :_destroy]
+  permits :name, :description, :adapter, :host, :port, :dbname, :user, :password, :encoding, :bigquery_project_id, :bigquery_keyfile, :bigquery_dataset_name, bigquery_tables_attributes: [:id, :name, :_destroy]
 
   before_action :require_admin_login, only: %w(new create edit update destroy)
 
@@ -20,7 +20,10 @@ class DataSourcesController < ApplicationController
 
   def create(data_source)
     if data_source[:adapter] == 'bigquery'
-      @data_source = BigqueryDataSource.create!(data_source_params(data_source))
+      bigquery_params = data_source_params(data_source)
+      upload_file = bigquery_params[:bigquery_keyfile]
+      bigquery_params[:bigquery_keyfile] = upload_file.read if upload_file
+      @data_source = BigqueryDataSource.create!(bigquery_params)
     else
       @data_source = DatabaseDataSource.create!(data_source_params(data_source))
     end
@@ -39,6 +42,7 @@ class DataSourcesController < ApplicationController
   def update(id, data_source)
     @data_source = DataSource.find(id)
     @data_source.reset_data_source_tables!
+    data_source['bigquery_keyfile'] = Encryptor.decrypt(@data_source.bigquery_keyfile) if @data_source.bigquery_keyfile.present?
     @data_source.update!(data_source_params(data_source))
     flash[:info] = t("data_source_updated", name: @data_source.name)
     redirect_to data_sources_path

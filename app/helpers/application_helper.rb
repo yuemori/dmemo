@@ -19,10 +19,4 @@ module ApplicationHelper
     end
     link_to(name, '#', class: "add_fields btn btn-info", data: {id: id, fields: fields.gsub("\n", "")})
   end
-
-  def activated_adapter
-    defaults = %w(redshift postgresql mysql2)
-    defaults << 'bigquery' if BigqueryClient.enable?
-    defaults
-  end
 end

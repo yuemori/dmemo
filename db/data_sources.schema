@@ -6,6 +6,8 @@ create_table "data_sources", force: :cascade do |t|
   t.integer  "port"
   t.string   "dbname"
   t.string   "bigquery_dataset_name"
+  t.string   "bigquery_project_id"
+  t.binary   "bigquery_keyfile"
   t.string   "user"
   t.string   "password"
   t.string   "encoding"

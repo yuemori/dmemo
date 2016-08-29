@@ -21,7 +21,7 @@
           %td
             = data_source.description.truncate(50)
           %td
-            = data_source.adapter == 'bigquery' ? BigqueryClient.project_id : data_source.host
+            = data_source.adapter == 'bigquery' ? data_source.bigquery_project_id : data_source.host
           %td
             = data_source.adapter == 'bigquery' ? data_source.bigquery_dataset_name : data_source.dbname
           %td
