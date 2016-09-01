@@ -1,9 +1,16 @@
 version: '2'
 services:
+  db:
+    image: postgres:9.5
+    ports:
+      - '54321:5432'
   web:
-    image: hogelog/dmemo
+    build: .
+    image: dmemo
     env_file: .env.docker
+    network_mode: host
+    environment:
+      DATABASE_URL: postgres://postgres@localhost:54321/dmemo_production
+      RAILS_ENV: production
     volumes:
       - ./log/docker:/app/log
-    ports:
-      - "3000:3000"
