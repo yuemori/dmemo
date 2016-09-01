@@ -1,5 +1,5 @@
 class Encryptor
-  SECURE = YAML.load_file(Rails.root.join('config', 'secrets.yml'))[Rails.env]['secret_key_base'].freeze
+  SECURE = (ENV['SECRET_KEY_BASE'] || YAML.load_file(Rails.root.join('config', 'secrets.yml'))[Rails.env]['secret_key_base']).freeze
   CIPHER = 'aes-256-cbc'
 
   class << self
