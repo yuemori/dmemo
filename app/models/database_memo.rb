@@ -62,7 +62,7 @@ class DatabaseMemo < ActiveRecord::Base
     column_memos = table_memo.column_memos.to_a
 
     columns = source_table.columns
-    adapter = source_table.source_base_class.connection.pool.connections.first
+    adapter = source_table.adapter
 
     import_table_memo_raw_dataset!(table_memo, source_table, columns)
 

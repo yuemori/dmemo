@@ -11,9 +11,8 @@
       %tr
         %th Name
         %th Description
-        %th Host
-        %th Port
-        %th Database Name
+        %th Host / ProjectId
+        %th Database Name / Bigquery Dataset Name
         %th
       - @data_sources.each do |data_source|
         %tr
@@ -22,11 +21,9 @@
           %td
             = data_source.description.truncate(50)
           %td
-            = data_source.host
+            = data_source.adapter == 'bigquery' ? data_source.bigquery_project_id : data_source.host
           %td
-            = data_source.port
-          %td
-            = data_source.dbname
+            = data_source.adapter == 'bigquery' ? data_source.bigquery_dataset_name : data_source.dbname
           %td
             - if current_user.admin?
               = link_to edit_data_source_path(data_source) do

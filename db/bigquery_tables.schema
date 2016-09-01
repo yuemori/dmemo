@@ -1,0 +1,8 @@
+create_table "bigquery_tables", force: :cascade do |t|
+  t.string "name",            null: false
+  t.integer "data_source_id", null: false
+  t.datetime "created_at",    null: false
+  t.datetime "updated_at",    null: false
+end
+
+add_index "bigquery_tables", ["data_source_id"], name: "bigquery_tables_data_source_id", using: :btree

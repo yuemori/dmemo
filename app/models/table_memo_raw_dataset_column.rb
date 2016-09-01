@@ -6,6 +6,8 @@ class TableMemoRawDatasetColumn < ActiveRecord::Base
     when 'timestamp without time zone'
       d, t, z = value.to_s.split
       "#{d} #{t}"
+    when 'TIMESTAMP'
+      Time.at(value.to_f).strftime('%Y-%m-%d %X')
     else
       value.to_s
     end
